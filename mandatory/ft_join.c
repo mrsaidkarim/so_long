@@ -12,20 +12,6 @@
 
 #include "so_long.h"
 
-// int	ft_strlen(char *s)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!s)
-// 		return (0);
-// 	while (s[i])
-// 	{
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
 char	*ft_join(char *s1, char *s2)
 {
 	char	*res;
