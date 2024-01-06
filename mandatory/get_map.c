@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-void	ft_error(char *str)
+void	ft_error_msg(char *str)
 {
 	write(1, "Error\n", 6);
 	write(1, str, ft_strlen(str));
@@ -29,7 +29,7 @@ void	ft_getmap(char **argv, t_game *g)
 	i = 0;
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		ft_error("couldn't open the map\n");
+		ft_error_msg("couldn't open the map\n");
 	line = get_next_line(fd);
 	rows = NULL;
 	while (line)
@@ -37,11 +37,11 @@ void	ft_getmap(char **argv, t_game *g)
 		rows = ft_strjoin(rows, line);
 		free(line);
 		if (rows == NULL)
-			ft_error("allocation fails\n");
+			ft_error_msg("allocation fails\n");
 		line = get_next_line(fd);
 	}
 	if (rows == NULL)
-		ft_error("the map file is empty\n");
+		ft_error_msg("the map file is empty\n");
 	g->map.content = ft_split(rows, '\n');
 	close(fd);
 }
@@ -55,7 +55,7 @@ void	ft_map_dimensions(t_game *g)
 	while (g->map.content[i])
 	{
 		if (g->map.width != ft_strlen(g->map.content[i]))
-			ft_error("The map must be rectangular\n");
+			ft_maperror(g, "The map must be rectangular\n");
 		i++;
 	}
 	g->map.height = i;
