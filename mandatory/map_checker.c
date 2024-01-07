@@ -6,7 +6,7 @@
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 12:06:30 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/05 12:52:15 by skarim           ###   ########.fr       */
+/*   Updated: 2024/01/07 19:19:53 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_maperror(t_game *g, char *str)
 	int	i;
 
 	i = 0;
-	while(g->map.content[i])
+	while (g->map.content[i])
 	{
 		free(g->map.content[i]);
 		i++;
@@ -26,7 +26,7 @@ void	ft_maperror(t_game *g, char *str)
 	g->map.content = NULL;
 	free(g);
 	g = NULL;
-	ft_error(str);
+	ft_error_msg(str);
 }
 
 void	ft_map_parameters(t_game *g)
@@ -57,16 +57,21 @@ void	ft_map_parameters(t_game *g)
 	}
 }
 
+void	ft_set_position(t_game *g, int y, int x)
+{
+	g->player.x = x;
+	g->player.y = y;
+	g->player.direction = "right";
+}
+
 void	ft_checkmap(t_game *g)
 {
 	int	i;
 	int	j;
 
 	ft_map_parameters(g);
-	if (g->map.height == g->map.width)
-		ft_maperror(g, "the map isn't rectangular");
 	if (g->map.exit != 1 || g->map.coins < 1 || g->map.player != 1)
-		ft_error("invalid components map!\n");
+		ft_maperror(g, "invalid components map!\n");
 	i = 0;
 	while (g->map.content[i])
 	{
@@ -76,7 +81,9 @@ void	ft_checkmap(t_game *g)
 			if (i == 0 || i == g->map.height - 1
 				|| j == 0 || j == g->map.width - 1)
 				if (g->map.content[i][j] != '1')
-					ft_error("the map isn't closed by walls!\n");
+					ft_maperror(g, "the map isn't closed by walls!\n");
+			if (g->map.content[i][j] == 'P')
+				ft_set_position(g, i, j);
 			j++;
 		}
 		i++;
