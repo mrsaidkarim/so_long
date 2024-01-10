@@ -6,26 +6,31 @@
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 12:06:30 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/07 19:19:53 by skarim           ###   ########.fr       */
+/*   Updated: 2024/01/10 12:14:07 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	ft_maperror(t_game *g, char *str)
+void ft_free(t_game **g)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	while (g->map.content[i])
-	{
-		free(g->map.content[i]);
-		i++;
-	}
-	free(g->map.content);
-	g->map.content = NULL;
-	free(g);
-	g = NULL;
+    i = 0;
+    while ((*g)->map.content[i])
+    {
+        free((*g)->map.content[i]);
+        i++;
+    }
+    free((*g)->map.content);
+    (*g)->map.content = NULL;
+    free(*g);
+    *g = NULL;
+}
+
+void	ft_maperror(t_game **g, char *str)
+{
+	ft_free(g);
 	ft_error_msg(str);
 }
 
@@ -50,42 +55,44 @@ void	ft_map_parameters(t_game *g)
 			else if (g->map.content[i][j] == 'C')
 				g->map.coins++;
 			else if (g->map.content[i][j] != '0' && g->map.content[i][j] != '1')
-				ft_maperror(g, "the map contain invalid characters");
+				ft_maperror(&g, "the map contain invalid characters");
 			j++;
 		}
 		i++;
 	}
 }
 
-void	ft_set_position(t_game *g, int y, int x)
+void	ft_intit_player(t_game *g, int y, int x)
 {
 	g->player.x = x;
 	g->player.y = y;
 	g->player.direction = "right";
+	g->player.mv_nbr = 0;
 }
 
-void	ft_checkmap(t_game *g)
+void	ft_checkmap(t_game **g)
 {
 	int	i;
 	int	j;
 
-	ft_map_parameters(g);
-	if (g->map.exit != 1 || g->map.coins < 1 || g->map.player != 1)
+	ft_map_parameters(*g);
+	if ((*g)->map.exit != 1 || (*g)->map.coins < 1 || (*g)->map.player != 1)
 		ft_maperror(g, "invalid components map!\n");
 	i = 0;
-	while (g->map.content[i])
+	while ((*g)->map.content[i])
 	{
 		j = 0;
-		while (g->map.content[i][j])
+		while ((*g)->map.content[i][j])
 		{
-			if (i == 0 || i == g->map.height - 1
-				|| j == 0 || j == g->map.width - 1)
-				if (g->map.content[i][j] != '1')
+			if (i == 0 || i == (*g)->map.height - 1
+				|| j == 0 || j == (*g)->map.width - 1)
+				if ((*g)->map.content[i][j] != '1')
 					ft_maperror(g, "the map isn't closed by walls!\n");
-			if (g->map.content[i][j] == 'P')
-				ft_set_position(g, i, j);
+			if ((*g)->map.content[i][j] == 'P')
+				ft_intit_player(*g, i, j);
 			j++;
 		}
 		i++;
 	}
+	ft_check_path(g);
 }
