@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 15:44:36 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/02 15:44:56 by skarim           ###   ########.fr       */
+/*   Created: 2024/01/10 22:17:27 by skarim            #+#    #+#             */
+/*   Updated: 2024/01/10 22:17:47 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 char	*ft_read_file(int fd, char *first_res)
 {
