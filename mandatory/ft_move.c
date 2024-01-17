@@ -5,32 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/08 14:48:43 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/08 18:57:58 by skarim           ###   ########.fr       */
+/*   Created: 2024/01/14 20:41:19 by skarim            #+#    #+#             */
+/*   Updated: 2024/01/16 11:10:16 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 void	ft_move_left(t_game *g, int x, int y)
 {
 	g->player.direction = "left";
-	ft_rendermap(g);
-	if (g->map.content[y][x-1] != '1')
+	if (g->map.content[y][x - 1] != '1')
 	{
-		if (g->map.content[y][x-1] == 'E' && g->map.coins != 0)
+		if (g->map.content[y][x - 1] == 'E' && g->map.coins != 0)
 			return ;
-		if (g->map.content[y][x-1] == 'E' && g->map.coins == 0)
+		if (g->map.content[y][x - 1] == 'E' && g->map.coins == 0)
 		{
-			g->map.content[y][x] = '0';
-			ft_maperror(&g, "finished");
+			write(1, "You Won!", 8);
+			ft_free_game(g);
 		}
-		if (g->map.content[y][x-1] == 'C')
+		if (g->map.content[y][x - 1] == 'C')
 			g->map.coins--;
 		g->map.content[y][x] = '0';
-		g->map.content[y][x-1] = 'P';
+		g->map.content[y][x - 1] = 'P';
+		ft_put_image_to_window(g, g->floor_xpm, x, y);
+		ft_put_image_to_window(g, g->pac_man_lo_xpm, x - 1, y);
 		g->player.x -= 1;
-		g->player.direction = "left";
 		g->player.mv_nbr++;
 	}
 }
@@ -38,22 +38,22 @@ void	ft_move_left(t_game *g, int x, int y)
 void	ft_move_right(t_game *g, int x, int y)
 {
 	g->player.direction = "right";
-	ft_rendermap(g);
-	if (g->map.content[y][x+1] != '1')
+	if (g->map.content[y][x + 1] != '1')
 	{
-		if (g->map.content[y][x+1] == 'E' && g->map.coins != 0)
+		if (g->map.content[y][x + 1] == 'E' && g->map.coins != 0)
 			return ;
-		if (g->map.content[y][x+1] == 'E' && g->map.coins == 0)
+		if (g->map.content[y][x + 1] == 'E' && g->map.coins == 0)
 		{
-			g->map.content[y][x] = '0';
-			ft_maperror(&g, "finished");
+			write(1, "You Won!", 8);
+			ft_free_game(g);
 		}
-		if (g->map.content[y][x+1] == 'C')
+		if (g->map.content[y][x + 1] == 'C')
 			g->map.coins--;
 		g->map.content[y][x] = '0';
-		g->map.content[y][x+1] = 'P';
+		g->map.content[y][x + 1] = 'P';
+		ft_put_image_to_window(g, g->floor_xpm, x, y);
+		ft_put_image_to_window(g, g->pac_man_ro_xpm, x + 1, y);
 		g->player.x += 1;
-		g->player.direction = "right";
 		g->player.mv_nbr++;
 	}
 }
@@ -61,22 +61,22 @@ void	ft_move_right(t_game *g, int x, int y)
 void	ft_move_up(t_game *g, int x, int y)
 {
 	g->player.direction = "up";
-	ft_rendermap(g);
-	if (g->map.content[y-1][x] != '1')
+	if (g->map.content[y - 1][x] != '1')
 	{
-		if (g->map.content[y-1][x] == 'E' && g->map.coins != 0)
+		if (g->map.content[y - 1][x] == 'E' && g->map.coins != 0)
 			return ;
-		if (g->map.content[y-1][x] == 'E' && g->map.coins == 0)
+		if (g->map.content[y - 1][x] == 'E' && g->map.coins == 0)
 		{
-			g->map.content[y][x] = '0';
-			ft_maperror(&g, "finished");
+			write(1, "You Won!", 8);
+			ft_free_game(g);
 		}
-		if (g->map.content[y-1][x] == 'C')
+		if (g->map.content[y - 1][x] == 'C')
 			g->map.coins--;
 		g->map.content[y][x] = '0';
-		g->map.content[y-1][x] = 'P';
+		g->map.content[y - 1][x] = 'P';
+		ft_put_image_to_window(g, g->floor_xpm, x, y);
+		ft_put_image_to_window(g, g->pac_man_uo_xpm, x, y - 1);
 		g->player.y -= 1;
-		g->player.direction = "up";
 		g->player.mv_nbr++;
 	}
 }
@@ -84,29 +84,29 @@ void	ft_move_up(t_game *g, int x, int y)
 void	ft_move_down(t_game *g, int x, int y)
 {
 	g->player.direction = "down";
-	ft_rendermap(g);
-	if (g->map.content[y+1][x] != '1')
+	if (g->map.content[y + 1][x] != '1')
 	{
-		if (g->map.content[y+1][x] == 'E' && g->map.coins != 0)
+		if (g->map.content[y + 1][x] == 'E' && g->map.coins != 0)
 			return ;
-		if (g->map.content[y+1][x] == 'E' && g->map.coins == 0)
+		if (g->map.content[y + 1][x] == 'E' && g->map.coins == 0)
 		{
-			g->map.content[y][x] = '0';
-			ft_maperror(&g, "finished");
+			write(1, "You Won!", 8);
+			ft_free_game(g);
 		}
-		if (g->map.content[y+1][x] == 'C')
+		if (g->map.content[y + 1][x] == 'C')
 			g->map.coins--;
 		g->map.content[y][x] = '0';
-		g->map.content[y+1][x] = 'P';
+		g->map.content[y + 1][x] = 'P';
+		ft_put_image_to_window(g, g->floor_xpm, x, y);
+		ft_put_image_to_window(g, g->pac_man_do_xpm, x, y + 1);
 		g->player.y += 1;
-		g->player.direction = "down";
 		g->player.mv_nbr++;
 	}
 }
 
 int	ft_move_player(int keycode, t_game *g)
 {
-	int x;
+	int	x;
 	int	y;
 
 	x = g->player.x;
@@ -120,12 +120,8 @@ int	ft_move_player(int keycode, t_game *g)
 	if ((keycode == 125 || keycode == 1))
 		ft_move_down(g, x, y);
 	if (keycode == 53)
-	{
-		mlx_destroy_window(g->mlx_ptr, g->win_ptr);
-		ft_free(&g);
-		exit(1);
-	}
-	ft_rendermap(g);
-	ft_putnbr(g->player.mv_nbr);
+		ft_free_game(g);
+	if (x != g->player.x || y != g->player.y)
+		return (ft_putnbr(g->player.mv_nbr), ft_putchar('\n'), 0);
 	return (0);
 }
