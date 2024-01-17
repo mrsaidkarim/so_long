@@ -5,18 +5,51 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 11:31:30 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/05 12:52:28 by skarim           ###   ########.fr       */
+/*   Created: 2024/01/14 14:26:56 by skarim            #+#    #+#             */
+/*   Updated: 2024/01/16 11:55:24 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
-void	ft_error_msg(char *str)
+void	ft_free_map(t_game *g)
 {
-	write(1, "Error\n", 6);
-	write(1, str, ft_strlen(str));
-	exit(1);
+	int	i;
+
+	i = 0;
+	while (g->map.content[i])
+	{
+		free(g->map.content[i]);
+		i++;
+	}
+	free(g->map.content);
+}
+
+void	ft_empty_line(char *str, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == '\n' || str[ft_strlen(str)] == '\n')
+	{
+		free(str);
+		ft_fail_map(fd, "The map contain an empty line!");
+	}
+	while (str[i])
+	{
+		if (str[i] == '\n' && str[i + 1] == '\n')
+		{
+			free(str);
+			ft_fail_map(fd, "The map contain an empty line!");
+		}
+		i++;
+	}
+}
+
+void	ft_fail_map(int fd, char *str)
+{
+	close(fd);
+	ft_error_msg(str);
 }
 
 void	ft_getmap(char **argv, t_game *g)
@@ -24,7 +57,7 @@ void	ft_getmap(char **argv, t_game *g)
 	int		fd;
 	char	*line;
 	char	*rows;
-	int		i; 
+	int		i;
 
 	i = 0;
 	fd = open(argv[1], O_RDONLY);
@@ -37,12 +70,13 @@ void	ft_getmap(char **argv, t_game *g)
 		rows = ft_strjoin(rows, line);
 		free(line);
 		if (rows == NULL)
-			ft_error_msg("allocation fails\n");
+			ft_fail_map(fd, "allocation fails!");
 		line = get_next_line(fd);
 	}
 	if (rows == NULL)
-		ft_error_msg("the map file is empty\n");
-	g->map.content = ft_split(rows, '\n');
+		ft_fail_map(fd, "the map file is empty");
+	ft_empty_line(rows, fd);
+	g->map.content = ft_split(rows, '\n', fd);
 	close(fd);
 }
 
@@ -55,7 +89,10 @@ void	ft_map_dimensions(t_game *g)
 	while (g->map.content[i])
 	{
 		if (g->map.width != ft_strlen(g->map.content[i]))
-			ft_maperror(g, "The map must be rectangular\n");
+		{
+			ft_free_map(g);
+			ft_error_msg("The map must be rectangular");
+		}
 		i++;
 	}
 	g->map.height = i;
