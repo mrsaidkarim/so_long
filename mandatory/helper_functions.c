@@ -5,12 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/08 18:53:06 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/10 11:51:58 by skarim           ###   ########.fr       */
+/*   Created: 2024/01/14 14:01:10 by skarim            #+#    #+#             */
+/*   Updated: 2024/01/14 21:36:58 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
 
 void	ft_putchar(char c)
 {
