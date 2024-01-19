@@ -6,7 +6,7 @@
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:46:13 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/15 15:46:42 by skarim           ###   ########.fr       */
+/*   Updated: 2024/01/16 11:51:09 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*ft_word(char *str, char c)
 	return (s);
 }
 
-char	**ft_free_split(char **s, int n)
+void	ft_free_split(char **s, int n, int fd)
 {
 	int	i;
 
@@ -64,10 +64,10 @@ char	**ft_free_split(char **s, int n)
 		i++;
 	}
 	free(s);
-	return (NULL);
+	ft_fail_map(fd, "allocation fails\n");
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char *s, char c, int fd)
 {
 	char	**res;
 	int		i;
@@ -78,7 +78,7 @@ char	**ft_split(char *s, char c)
 	count = ft_count(s, c);
 	res = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!res)
-		return (NULL);
+		ft_fail_map(fd, "allocation fails\n");
 	i = 0;
 	res[count] = NULL;
 	while (i < count)
@@ -87,7 +87,7 @@ char	**ft_split(char *s, char c)
 			s++;
 		res[i] = ft_word(s, c);
 		if (res[i] == NULL)
-			return (ft_free_split(res, i));
+			ft_free_split(res, i, fd);
 		while (*s && *s != c)
 			s++;
 		i++;
