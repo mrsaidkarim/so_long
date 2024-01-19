@@ -6,7 +6,7 @@
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:05:36 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/15 15:07:46 by skarim           ###   ########.fr       */
+/*   Updated: 2024/01/16 11:53:42 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_free_map(t_game *g)
 	free(g->map.content);
 }
 
-void	ft_empty_line(char *str)
+void	ft_empty_line(char *str, int fd)
 {
 	int	i;
 
@@ -33,17 +33,23 @@ void	ft_empty_line(char *str)
 	if (str[0] == '\n' || str[ft_strlen(str)] == '\n')
 	{
 		free(str);
-		ft_error_msg("The map contain an empty line!");
+		ft_fail_map(fd, "The map contain an empty line!");
 	}
 	while (str[i])
 	{
 		if (str[i] == '\n' && str[i + 1] == '\n')
 		{
 			free(str);
-			ft_error_msg("The map contain an empty line!");
+			ft_fail_map(fd, "The map contain an empty line!");
 		}
 		i++;
 	}
+}
+
+void	ft_fail_map(int fd, char *str)
+{
+	close(fd);
+	ft_error_msg(str);
 }
 
 void	ft_getmap(char **argv, t_game *g)
@@ -64,13 +70,13 @@ void	ft_getmap(char **argv, t_game *g)
 		rows = ft_strjoin(rows, line);
 		free(line);
 		if (rows == NULL)
-			ft_error_msg("allocation fails\n");
+			ft_fail_map(fd, "allocation fails!");
 		line = get_next_line(fd);
 	}
 	if (rows == NULL)
-		ft_error_msg("the map file is empty\n");
-	ft_empty_line(rows);
-	g->map.content = ft_split(rows, '\n');
+		ft_fail_map(fd, "the map file is empty");
+	ft_empty_line(rows, fd);
+	g->map.content = ft_split(rows, '\n', fd);
 	close(fd);
 }
 
