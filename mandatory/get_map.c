@@ -30,7 +30,7 @@ void	ft_empty_line(char *str, int fd)
 	int	i;
 
 	i = 0;
-	if (str[0] == '\n' || str[ft_strlen(str)] == '\n')
+	if (str[0] == '\n' || str[ft_strlen(str) - 1] == '\n')
 	{
 		free(str);
 		ft_fail_map(fd, "The map contain an empty line!");
