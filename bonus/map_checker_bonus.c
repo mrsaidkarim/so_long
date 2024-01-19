@@ -6,7 +6,7 @@
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:09:30 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/15 19:36:31 by skarim           ###   ########.fr       */
+/*   Updated: 2024/01/19 12:55:40 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	ft_intit_player(t_game *g, int y, int x)
 
 void	ft_check_size(t_game *g)
 {
-	if (g->map.height > WINDOW_HEIGHT / IMG_HEIGHT
-		|| g->map.width > WINDOW_WIDTH / IMG_WIDTH)
+	if (g->map.height >= WINDOW_HEIGHT / IMG_HEIGHT
+		|| g->map.width >= WINDOW_WIDTH / IMG_WIDTH)
 		ft_maperror(g, "The map size is too large for the screen!\n");
 }
 
