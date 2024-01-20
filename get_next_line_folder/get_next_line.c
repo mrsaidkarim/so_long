@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skarim <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 22:17:27 by skarim            #+#    #+#             */
-/*   Updated: 2024/01/10 22:17:47 by skarim           ###   ########.fr       */
+/*   Created: 2024/01/14 13:41:59 by skarim            #+#    #+#             */
+/*   Updated: 2024/01/16 13:03:14 by skarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,6 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*tmp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	tmp = ft_read_file(fd, res);
 	if (!tmp)
 	{
