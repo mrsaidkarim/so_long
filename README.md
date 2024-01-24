@@ -14,3 +14,12 @@ so_long is a project assigned by 42, which involves creating a simple 2D game us
 ### Dependencies
 
 - MinilibX: The MinilibX library is required for handling graphics. Make sure it is installed on your system.
+
+#### Mandatory:
+
+![screenshot_mandatory](screens/screen_mandatory.png)
+
+
+#### Bonus:
+
+![screenshot_bonus](screens/screen_bonus.png)
